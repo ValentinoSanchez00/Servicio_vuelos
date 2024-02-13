@@ -23,5 +23,16 @@ class PasajeroModel extends Basedatos {
         }
     }
 
-
+    public function getNombres() {
+        try {
+            $sql = "SELECT CONCAT(pasajerocod, '- ', nombre) AS nombre_concatenado FROM pasajero;";
+            $statement = $this->conexion->query($sql);
+            $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $statement = null;
+            // Retorna el array de registros
+            return $registros;
+        } catch (PDOException $e) {
+            return "ERROR AL CARGAR.<br>" . $e->getMessage();
+        }
+    }
 }
