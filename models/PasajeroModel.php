@@ -35,4 +35,32 @@ class PasajeroModel extends Basedatos {
             return "ERROR AL CARGAR.<br>" . $e->getMessage();
         }
     }
+
+    public function getvalidarnombre($nombre, $identificador) {
+        try {
+            $sql = "SELECT pasajerocod FROM pasajero WHERE pasajerocod NOT IN (SELECT pasajerocod FROM pasaje WHERE identificador='" . $identificador . "') AND nombre=" . $nombre;
+            $statement = $this->conexion->query($sql);
+            $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $statement = null;
+            $hayRegistros = count($registros) > 0;
+
+            return $hayRegistros;
+        } catch (PDOException $e) {
+            return "ERROR AL CARGAR.<br>" . $e->getMessage();
+        }
+    }
+
+    public function getvalidarasiento($asiento, $identificador) {
+        try {
+            $sql = "SELECT * FROM pasaje WHERE identificador='" . $identificador . "') AND asiento=" . $asiento;
+            $statement = $this->conexion->query($sql);
+            $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $statement = null;
+            $hayRegistros = count($registros) > 0;
+
+            return $hayRegistros;
+        } catch (PDOException $e) {
+            return "ERROR AL CARGAR.<br>" . $e->getMessage();
+        }
+    }
 }
