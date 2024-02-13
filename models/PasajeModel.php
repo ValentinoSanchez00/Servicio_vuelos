@@ -22,10 +22,10 @@ class PasajeModel extends Basedatos {
             return "ERROR AL CARGAR.<br>" . $e->getMessage();
         }
     }
-    
+
     public function GetPasajerosidentificador($id) {
         try {
-            $sql = "SELECT COUNT(identificador) 'Num pasajeros' FROM $this->table where identificador='".$id."' GROUP BY identificador";
+            $sql = "SELECT COUNT(identificador) 'Num pasajeros' FROM $this->table where identificador='" . $id . "' GROUP BY identificador";
             $statement = $this->conexion->query($sql);
             $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
             $statement = null;
@@ -36,5 +36,16 @@ class PasajeModel extends Basedatos {
         }
     }
 
-
+    public function getPasjeIdentificadores() {
+        try {
+            $sql = "SELECT identificador FROM $this->table GROUP BY identificador;";
+            $statement = $this->conexion->query($sql);
+            $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $statement = null;
+            // Retorna el array de registros
+            return $registros;
+        } catch (PDOException $e) {
+            return "ERROR AL CARGAR.<br>" . $e->getMessage();
+        }
+    }
 }

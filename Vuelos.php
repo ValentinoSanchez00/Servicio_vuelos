@@ -12,7 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $res = $dep->getUnVuelo($_GET['id']);
         echo json_encode($res);
         exit();
-    } else {
+    } else  if (isset($_GET['identificadores'])) {
+         $res = $dep->getidentificadores();
+        echo json_encode($res);
+        exit();
+    }
+    else {
         $res = $dep->getAll();
         echo json_encode($res);
         exit();
