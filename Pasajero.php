@@ -10,11 +10,11 @@ $dep = new PasajeroModel();
 // devuelve o 1 o todos, dependiendo si recibe o no parámetro
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-    if (isset($_GET['nombre'])) {
+    if(isset($_GET['nombre'])) {
         $res = $dep->getNombres();
         echo json_encode($res);
         exit();
-    } else if (isset($_GET['validar']) && isset($_GET['identificador'])) {
+    } else if(isset($_GET['validar']) && isset($_GET['identificador'])) {
         $res = $dep->getvalidarnombre($_GET['validar'], $_GET['identificador']);
         echo $res;
         exit();

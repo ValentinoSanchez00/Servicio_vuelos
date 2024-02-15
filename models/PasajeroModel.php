@@ -16,7 +16,7 @@ class PasajeroModel extends Basedatos {
             $statement = $this->conexion->query($sql);
             $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
             $statement = null;
-            // Retorna el array de registros
+// Retorna el array de registros
             return $registros;
         } catch (PDOException $e) {
             return "ERROR AL CARGAR.<br>" . $e->getMessage();
@@ -29,7 +29,7 @@ class PasajeroModel extends Basedatos {
             $statement = $this->conexion->query($sql);
             $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
             $statement = null;
-            // Retorna el array de registros
+// Retorna el array de registros
             return $registros;
         } catch (PDOException $e) {
             return "ERROR AL CARGAR.<br>" . $e->getMessage();
@@ -38,13 +38,14 @@ class PasajeroModel extends Basedatos {
 
     public function getvalidarnombre($nombre, $identificador) {
         try {
-            $sql = "SELECT pasajerocod FROM pasajero WHERE pasajerocod NOT IN (SELECT pasajerocod FROM pasaje WHERE identificador='" . $identificador . "') AND nombre=" . $nombre;
+            $sql = "SELECT * FROM pasajero WHERE nombre = '" . $nombre . "' AND NOT EXISTS (SELECT 1 FROM pasaje WHERE pasajero.pasajerocod = pasaje.pasajerocod  AND pasaje.identificador = '" . $identificador . "');";
             $statement = $this->conexion->query($sql);
             $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
             $statement = null;
-            $hayRegistros = count($registros) > 0;
 
-            return $hayRegistros;
+            return $registros;
+            
+            //<b>Warning</b>:  Array to string conversion in <b>C:\xampp\htdocs\_servWeb\vueloservice\Pasajero.php</b> on line <b>19</b><br />
         } catch (PDOException $e) {
             return "ERROR AL CARGAR.<br>" . $e->getMessage();
         }
@@ -52,13 +53,12 @@ class PasajeroModel extends Basedatos {
 
     public function getvalidarasiento($asiento, $identificador) {
         try {
-            $sql = "SELECT * FROM pasaje WHERE identificador='" . $identificador . "') AND asiento=" . $asiento;
+            $sql = "SELECT * FROM pasaje WHERE identificador = '" . $identificador . "' AND numasiento = " . $asiento;
             $statement = $this->conexion->query($sql);
             $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
             $statement = null;
-            $hayRegistros = count($registros) > 0;
-
-            return $hayRegistros;
+//<b>Warning</b>:  Array to string conversion in <b>C:\xampp\htdocs\_servWeb\vueloservice\Pasajero.php</b> on line <b>23</b><br />
+            return $registros;
         } catch (PDOException $e) {
             return "ERROR AL CARGAR.<br>" . $e->getMessage();
         }

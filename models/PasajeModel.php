@@ -48,4 +48,21 @@ class PasajeModel extends Basedatos {
             return "ERROR AL CARGAR.<br>" . $e->getMessage();
         }
     }
+
+  public function deletebyId($id) {
+    try {
+        $sql = "DELETE FROM pasaje WHERE idpasaje ='".$id."';";
+        $rowCount = $this->conexion->exec($sql);
+        
+        if ($rowCount > 0) {
+            return ["success" => true, "message" => "Registro eliminado correctamente"];
+        } else {
+            return ["success" => false, "message" => "No se encontró el registro para eliminar"];
+        }
+    } catch (PDOException $e) {
+        return ["success" => false, "message" => "ERROR AL ELIMINAR: " . $e->getMessage()];
+    }
 }
+
+    }
+
