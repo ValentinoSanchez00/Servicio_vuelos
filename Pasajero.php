@@ -14,13 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $res = $dep->getNombres();
         echo json_encode($res);
         exit();
-    } else if(isset($_GET['validar']) && isset($_GET['identificador'])) {
-        $res = $dep->getvalidarnombre($_GET['validar'], $_GET['identificador']);
-        echo $res;
-        exit();
-    } else if (isset($_GET['validarasiento']) && isset($_GET['identificador'])) {
-        $res = $dep->getvalidarasiento($_GET['validarasiento'], $_GET['identificador']);
-        echo $res;
+    } else if(isset($_GET['validar']) && isset($_GET['identificador'])  && isset($_GET['numasiento'])&& isset($_GET['clase'])&& isset($_GET['pvp'])) {
+        $res = $dep->getvalidar($_GET['validar'], $_GET['identificador'],$_GET['numasiento'],$_GET["clase"],$_GET["pvp"]);
+        echo json_encode($res);
         exit();
     } else {
         $res = $dep->getAll();
@@ -28,8 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         exit();
     }
 }
-
-
 
 
 // En caso de que ninguna de las opciones anteriores se haya ejecutado

@@ -36,31 +36,46 @@ class PasajeroModel extends Basedatos {
         }
     }
 
-    public function getvalidarnombre($nombre, $identificador) {
+    public function getvalidar($nombre, $identificador, $numasiento, $clase, $pvp) {
         try {
-            $sql = "SELECT * FROM pasajero WHERE nombre = '" . $nombre . "' AND NOT EXISTS (SELECT 1 FROM pasaje WHERE pasajero.pasajerocod = pasaje.pasajerocod  AND pasaje.identificador = '" . $identificador . "');";
+            $id= intval($nombre);
+            $sql = "SELECT count(*) 'count' FROM $this->table WHERE pasajerocod = " . $id . " AND NOT EXISTS (SELECT 1 FROM pasaje WHERE pasajero.pasajerocod = pasaje.pasajerocod  AND pasaje.identificador = '" . $identificador . "');";
             $statement = $this->conexion->query($sql);
-            $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $registros1 = $statement->fetchAll(PDO::FETCH_ASSOC);
             $statement = null;
+            $contador = $registros1[0];
+            if ($contador['count'] <= 0) {
+                return false;
+            }
 
-            return $registros;
-            
-            //<b>Warning</b>:  Array to string conversion in <b>C:\xampp\htdocs\_servWeb\vueloservice\Pasajero.php</b> on line <b>19</b><br />
-        } catch (PDOException $e) {
-            return "ERROR AL CARGAR.<br>" . $e->getMessage();
-        }
-    }
-
-    public function getvalidarasiento($asiento, $identificador) {
-        try {
-            $sql = "SELECT * FROM pasaje WHERE identificador = '" . $identificador . "' AND numasiento = " . $asiento;
+            $sql = "SELECT count(*) 'count' FROM pasaje WHERE identificador = '" . $identificador . "' AND numasiento = " . $numasiento;
             $statement = $this->conexion->query($sql);
-            $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $registros2 = $statement->fetchAll(PDO::FETCH_ASSOC);
             $statement = null;
-//<b>Warning</b>:  Array to string conversion in <b>C:\xampp\htdocs\_servWeb\vueloservice\Pasajero.php</b> on line <b>23</b><br />
-            return $registros;
+            $contador2 = $registros2[0];
+            if ($contador2['count'] > 0) {
+                return false;
+            }
+
+            if ($registros1 && $registros2) {
+                try {
+                    $sql3 = "insert into pasaje (pasajerocod,identificador,numasiento,clase,pvp) values (?,?,?,?,?)";
+                    $sentencia = $this->conexion->prepare($sql3);
+                    $sentencia->bindParam(1, $id);
+                    $sentencia->bindParam(2, $identificador);
+                    $sentencia->bindParam(3, $numasiento);
+                    $sentencia->bindParam(4, $clase);
+                    $sentencia->bindParam(5, $pvp);
+                    $num = $sentencia->execute();
+                    return "Registro insertado: " . $identificador;
+                } catch (PDOException $e) {
+                    return "Error al grabar.<br>" . $e->getMessage();
+                }
+            }
         } catch (PDOException $e) {
             return "ERROR AL CARGAR.<br>" . $e->getMessage();
         }
     }
 }
+
+//SELECT count(*) 'count' FROM pasajero WHERE nombre = "ATONIO MART?NEZ" AND pasajerocod NOT IN(SELECT pasajerocod FROM pasaje WHERE identificador = 'AVI-345');
