@@ -64,5 +64,47 @@ class PasajeModel extends Basedatos {
     }
 }
 
+
+        public function postvalidar($post) {
+        try {
+
+            $sql = "SELECT count(*) pasajerocod FROM pasaje WHERE identificador = '" . $post["identificador"] . "' AND pasajerocod=".$post["pasajerocod"].";";
+            $statement = $this->conexion->query($sql);
+            $registros1 = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $statement = null;
+            $contador = $registros1[0];
+            if ($contador["pasajerocod"] > 0) {
+                return "Error el pasajero: ".$post["identificador"]." ya tiene un vuelo";
+            }
+
+            $sql = "SELECT count(*) 'count' FROM pasaje WHERE identificador = '" . $post["identificador"] . "' AND numasiento = " . $post["numasiento"];
+            $statement = $this->conexion->query($sql);
+            $registros2 = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $statement = null;
+            $contador2 = $registros2[0];
+            if ($contador2['count'] > 0) {
+                return "Error ya hay un asiento cogido en este vuelo";
+            }
+
+            if ($registros1 && $registros2) {
+                try {
+                    $sql3 = "insert into pasaje (pasajerocod,identificador,numasiento,clase,pvp) values (?,?,?,?,?)";
+                    $sentencia = $this->conexion->prepare($sql3);
+                    $sentencia->bindParam(1, $post["pasajerocod"]);
+                    $sentencia->bindParam(2, $post["identificador"]);
+                    $sentencia->bindParam(3, $post["numasiento"]);
+                    $sentencia->bindParam(4, $post["clase"]);
+                    $sentencia->bindParam(5, $post["pvp"]);
+                    $num = $sentencia->execute();
+                    return "Registro insertado: " . $post["identificador"];
+                } catch (PDOException $e) {
+                    return "Error al grabar.<br>" . $e->getMessage();
+                }
+            }
+        } catch (PDOException $e) {
+            return "ERROR AL CARGAR.<br>" . $e->getMessage();
+        }
+    }
+
     }
 
