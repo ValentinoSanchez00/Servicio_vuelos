@@ -49,35 +49,58 @@ class PasajeModel extends Basedatos {
         }
     }
 
-  public function deletebyId($id) {
-    try {
-        $sql = "DELETE FROM pasaje WHERE idpasaje ='".$id."';";
-        $rowCount = $this->conexion->exec($sql);
-        
-        if ($rowCount > 0) {
-            return ["success" => true, "message" => "Registro eliminado correctamente"];
-        } else {
-            return ["success" => false, "message" => "No se encontró el registro para eliminar"];
+    public function deletebyId($id) {
+        try {
+            $sql = "DELETE FROM $this->table WHERE idpasaje ='" . $id . "';";
+            $rowCount = $this->conexion->exec($sql);
+
+            if ($rowCount > 0) {
+                return ["success" => true, "message" => "Registro eliminado correctamente"];
+            } else {
+                return ["success" => false, "message" => "No se encontró el registro para eliminar"];
+            }
+        } catch (PDOException $e) {
+            return ["success" => false, "message" => "ERROR AL ELIMINAR: " . $e->getMessage()];
         }
-    } catch (PDOException $e) {
-        return ["success" => false, "message" => "ERROR AL ELIMINAR: " . $e->getMessage()];
     }
-}
 
+    public function updatePasaje($post,$id) {
+        try {
+            $sql = "UPDATE pasaje SET pasajerocod = ?, identificador = ?, numasiento = ?, clase = ?, pvp = ? WHERE idpasaje = ?";
+            // Vincular los parámetros
+            $sentencia->bindParam(1, $pasajerocod);
+            $sentencia->bindParam(2, $identificador);
+            $sentencia->bindParam(3, $numasiento);
+            $sentencia->bindParam(4, $clase);
+            $sentencia->bindParam(5, $pvp);
+            $sentencia->bindParam(6, $id);
 
-        public function postvalidar($post) {
+            // Ejecutar la actualización
+            $numFilasAfectadas = $sentencia->execute();
+
+            if ($numFilasAfectadas > 0) {
+                echo "Pasaje actualizado correctamente";
+            } else {
+                echo "No se realizó ninguna actualización. Puede que el ID del pasaje no exista.";
+            }
+        } catch (PDOException $e) {
+            echo "Error al actualizar el pasaje: " . $e->getMessage();
+        }
+    }
+
+    public function postvalidar($post) {
         try {
 
-            $sql = "SELECT count(*) pasajerocod FROM pasaje WHERE identificador = '" . $post["identificador"] . "' AND pasajerocod=".$post["pasajerocod"].";";
+            $sql = "SELECT count(*) pasajerocod FROM $this->table WHERE identificador = '" . $post["identificador"] . "' AND pasajerocod=" . $post["pasajerocod"] . ";";
             $statement = $this->conexion->query($sql);
             $registros1 = $statement->fetchAll(PDO::FETCH_ASSOC);
             $statement = null;
             $contador = $registros1[0];
             if ($contador["pasajerocod"] > 0) {
-                return "Error el pasajero: ".$post["identificador"]." ya tiene un vuelo";
+                return "Error el pasajero: " . $post["identificador"] . " ya tiene un vuelo";
             }
 
-            $sql = "SELECT count(*) 'count' FROM pasaje WHERE identificador = '" . $post["identificador"] . "' AND numasiento = " . $post["numasiento"];
+            $sql = "SELECT count(*) 'count' FROM $this->table WHERE identificador = '" . $post["identificador"] . "' AND numasiento = " . $post["numasiento"];
             $statement = $this->conexion->query($sql);
             $registros2 = $statement->fetchAll(PDO::FETCH_ASSOC);
             $statement = null;
@@ -105,6 +128,4 @@ class PasajeModel extends Basedatos {
             return "ERROR AL CARGAR.<br>" . $e->getMessage();
         }
     }
-
-    }
-
+}
