@@ -32,23 +32,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
 // Crear un nuevo reg POST
 // Los campos del array que venga se deberán llamar como los campos de la tabla Departamentos
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_GET["validar"])) {
-        // se cargan toda la entrada que venga en php://input
-        $post = json_decode(file_get_contents('php://input'), true);
-        $res = $dep->postvalidar($post);
-        $resul['resultado'] = $res;
-        echo json_encode($resul);
-        exit();
-    } else if(isset ($_GET["actualizar"])) {
+     if(isset ($_GET["actualizar"])) {
          // se cargan toda la entrada que venga en php://input
     $post = json_decode(file_get_contents('php://input'), true);
     $res = $dep->postvalidar($post,$_GET["actualizar"]);
     $resul['resultado'] = $res;
     echo json_encode($resul);
     exit();
-    } else {
-        
-    }
+    } 
+}
+
+// Actualizar PUT, se reciben los datoc como en el put
+// Los campos del array que venga se deberán llamar como los campos de la tabla Departamentos
+if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+    $post = json_decode(file_get_contents('php://input'), true);
+    $res = $dep->actualiza($post);
+    $resul['mensaje'] = $res;
+    echo json_encode($resul);
+    exit();
 }
 
 
