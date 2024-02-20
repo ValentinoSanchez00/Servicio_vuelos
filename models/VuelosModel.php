@@ -12,7 +12,32 @@ class VuelosModel extends Basedatos {
 
     public function getAll() {
         try {
-            $sql = "SELECT v.identificador,v.aeropuertoorigen,v.aeropuertodestino,v.tipovuelo,v.fechavuelo,v.descuento,COUNT(p.identificador) 'numpasajero' FROM $this->table v  LEFT JOIN pasaje p ON (v.identificador=p.identificador) GROUP BY v.identificador";
+ $sql = "SELECT 
+    v.identificador,
+    v.aeropuertoorigen AS codigo_origen,
+    ao.nombre AS nombre_origen,
+    v.aeropuertodestino AS codigo_destino,
+    ad.nombre AS nombre_destino,
+    v.tipovuelo,
+    v.fechavuelo,
+    v.descuento,
+    COUNT(p.identificador) AS numpasajero
+FROM $this->table v
+LEFT JOIN pasaje p ON v.identificador = p.identificador    
+JOIN aeropuerto ao ON v.aeropuertoorigen = ao.codaeropuerto
+JOIN aeropuerto ad ON v.aeropuertodestino = ad.codaeropuerto
+GROUP BY 
+    v.identificador,
+    v.aeropuertoorigen,
+    ao.nombre,
+    v.aeropuertodestino,
+    ad.nombre,
+    v.tipovuelo,
+    v.fechavuelo,
+    v.descuento;
+";
+
+
             $statement = $this->conexion->query($sql);
             $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
             $statement = null;
