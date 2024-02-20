@@ -52,6 +52,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     exit();
 }
 
+// Borrar DELETE
+if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+    $id=$_GET['id'];
+    $res = $dep->borrar($id);
+    $resul['resultado'] = $res;
+    echo json_encode($resul);
+    exit();
+}
+
 
 // En caso de que ninguna de las opciones anteriores se haya ejecutado
 header("HTTP/1.1 400 Bad Request");

@@ -155,4 +155,21 @@ class PasajeModel extends Basedatos {
             return "ERROR AL CARGAR.<br>" . $e->getMessage();
         }
     }
+    
+    
+    
+        public function borrar($id)  {
+        try {
+            $sql = "delete from $this->table where idpasaje= ? ";
+            $sentencia = $this->conexion->prepare($sql);
+            $sentencia->bindParam(1, $id);
+            $num = $sentencia->execute();
+            if ($sentencia->rowCount() == 0)
+                return "Registro NO Borrado, no se localiza: " . $id;
+            else
+                return "Registro Borrado: " . $id;
+           } catch (PDOException $e) {
+            return "ERROR AL BORRAR.<br>" . $e->getMessage();
+        }
+    }
 }
