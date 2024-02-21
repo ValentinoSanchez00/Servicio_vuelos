@@ -22,6 +22,20 @@ class PasajeModel extends Basedatos {
             return "ERROR AL CARGAR.<br>" . $e->getMessage();
         }
     }
+    
+    public function getPasjebyId($id) {
+           try {
+            $sql = "select * from $this->table where identificador='".$id."'";
+            $statement = $this->conexion->query($sql);
+            $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $statement = null;
+            // Retorna el array de registros
+            return $registros;
+        } catch (PDOException $e) {
+            return "ERROR AL CARGAR.<br>" . $e->getMessage();
+        }
+    }
+    
 
     public function GetPasajerosidentificador($id) {
         try {
