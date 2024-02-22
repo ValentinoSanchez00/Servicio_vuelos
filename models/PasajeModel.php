@@ -25,7 +25,17 @@ class PasajeModel extends Basedatos {
     
     public function getPasjebyId($id) {
            try {
-            $sql = "select * from $this->table where identificador='".$id."'";
+            $sql = "SELECT 
+            pa.idpasaje,
+            pa.pasajerocod,
+            pj.nombre,
+            pj.pais,
+            pa.numasiento,
+            pa.clase,
+            pa.pvp
+        FROM pasaje pa
+        JOIN pasajero pj ON pa.pasajerocod = pj.pasajerocod
+        WHERE pa.identificador = '".$id."'";
             $statement = $this->conexion->query($sql);
             $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
             $statement = null;
