@@ -36,10 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
 // Crear un nuevo reg POST
 // Los campos del array que venga se deberán llamar como los campos de la tabla Departamentos
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_GET["actualizar"])) {
+    if (isset($_GET["insertar"])) {
         // se cargan toda la entrada que venga en php://input
         $post = json_decode(file_get_contents('php://input'), true);
-        $res = $dep->postvalidar($post, $_GET["actualizar"]);
+        $res = $dep->postvalidar($post, $_GET["insertar"]);
         $resul['resultado'] = $res;
         echo json_encode($resul);
         exit();

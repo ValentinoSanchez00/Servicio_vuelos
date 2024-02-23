@@ -47,18 +47,6 @@ class PasajeModel extends Basedatos {
     }
     
 
-    public function GetPasajerosidentificador($id) {
-        try {
-            $sql = "SELECT COUNT(identificador) 'Num pasajeros' FROM $this->table where identificador='" . $id . "' GROUP BY identificador";
-            $statement = $this->conexion->query($sql);
-            $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
-            $statement = null;
-            // Retorna el array de registros
-            return $registros;
-        } catch (PDOException $e) {
-            return "ERROR AL CARGAR.<br>" . $e->getMessage();
-        }
-    }
 
     public function getPasjeIdentificadores() {
         try {
@@ -121,14 +109,14 @@ class PasajeModel extends Basedatos {
                     $sentencia->bindParam(3, $post['numasiento']);
                     $sentencia->bindParam(4, $post['clase']);
                     $sentencia->bindParam(5, $post['pvp']);
-                    $sentencia->bindParam(6, $post['idPasaje']);  // Asegúrate de que 'idPasaje' sea el nombre correcto
+                    $sentencia->bindParam(6, $post['idpasaje']);  // Asegúrate de que 'idPasaje' sea el nombre correcto
 
                     $num = $sentencia->execute();
 
                     if ($sentencia->rowCount() == 0) {
-                        return "Registro NO actualizado, o no existe o no hay cambios: " . $post['idPasaje'];
+                        return "Registro NO actualizado, o no existe o no hay cambios: " . $post['idpasaje'];
                     } else {
-                        return "Registro actualizado: " . $post['idPasaje'];
+                        return "Registro actualizado: " . $post['idpasaje'];
                     }
                 } catch (PDOException $e) {
                     return "Error al actualizar.<br>" . $e->getMessage();
